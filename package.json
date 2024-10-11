@@ -1,0 +1,17 @@
+{
+    "name": "my-b2b-app",
+    "version": "1.0.0",
+    "description": "B2B App for Guitar Manufacturer and Dealership with PingOne Authentication",
+    "main": "app.js",
+    "scripts": {
+        "start": "node app.js"
+    },
+    "dependencies": {
+        "@pingidentity-developers-experience/ping-oidc-client-sdk": "^2.4.0",
+        "axios": "^1.7.7",
+        "dotenv": "^16.4.5",
+        "ejs": "^3.1.10",
+        "express": "^4.21.0",
+        "node-fetch": "^2.6.1"
+    }
+}

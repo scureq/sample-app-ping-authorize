@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body class="dashboard-page">
+  <div class="background-image"></div>
+  <header>
+    <div class="header-container">
+    <!-- <img src="/images/logo.svg" alt="Logo" class="logo"> -->
+    <h1>Welcome to the Guitar Shop</h1>
+    <nav class="top-nav">
+      <ul>
+        <a href="/" class="login-btn">Main Page</a>
+        <button id="bxi-log-out" class="login-btn">Log Out</button>
+      </ul>
+    </div>
+  </header>
+
+  <section id="user-info">
+    <!-- User information will be injected here -->
+  </section>
+  <section class="data-container"> 
+  <section id="main-data" style="display: none;">
+    <h2>Financial Data</h2>
+    <ul>
+      <li>Recently Purchased Guitars: 150</li>
+      <li>Total Value: $450,000</li>
+      <li>Total Revenue: $1,200,000</li>
+      <li>Sold Guitars: 200</li>
+    </ul>
+  </section>
+  
+  <section id="user-stats" style="display: none;">
+    <h2>User Statistics</h2>
+    <ul>
+      <li>Total Registered Users: 5000</li>
+      <li>Active Users: 1200</li>
+      <li>Premium Users: 850</li>
+      <li>Subscription Renewals: 600</li>
+    </ul>
+  </section>
+  <section class="data-container"></section>
+  
+  <!-- Include the PingOne OIDC SDK -->
+  <script type="module" src="https://unpkg.com/@pingidentity-developers-experience/ping-oidc-client-sdk@^2/lib/ping-oidc.js"></script>
+
+  <script type="module">
+    document.addEventListener("DOMContentLoaded", async () => {
+      const pingOneDomain = "<%= PING_ONE_DOMAIN %>";
+      const pingOneEnvId = "<%= PING_ONE_ENV_ID %>";
+      const authorizeEndpoint = "<%= AUTHORIZE_ENDPOINT %>";
+      
+      const clientOptions = {
+        client_id: "<%= CLIENT_ID %>",
+        redirect_uri: "<%= REDIRECT_URI %>",
+        logout_uri: "<%= LOGOUT_URL %>",
+        scope: "openid profile email",
+      };
+
+      try {
+        // Initialize OIDC client from the well-known OpenID configuration
+        const client = await pingOidc.OidcClient.initializeFromOpenIdConfig(
+          `https://auth.pingone.${pingOneDomain}/${pingOneEnvId}/as`,
+          clientOptions
+        );
+
+        // Attempt to retrieve an authorization code from the URL
+        const tokenResponse = await client.getToken();
+
+        if (!tokenResponse || !tokenResponse.access_token) {
+          console.error("No access token found.");
+          return;
+        }
+
+        console.log("Access Token:", tokenResponse.access_token);
+
+        // Fetch user info using the access token
+        const userInfo = await client.fetchUserInfo();
+        console.log("User Info:", userInfo);
+
+        // Display user info in a table format
+        const userInfoContainer = document.getElementById("user-info");
+        userInfoContainer.innerHTML = `
+          <h2>User Info</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Claim Name</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        `;
+        const tbody = userInfoContainer.querySelector("tbody");
+
+        Object.entries(userInfo).forEach(([key, value]) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td><strong>${key}</strong></td>
+            <td>${value}</td>
+          `;
+          tbody.appendChild(row);
+        });
+
+        // Call the PingOne Authorize API using the client credentials flow
+        const clientCredentialsOptions = {
+          client_id: "<%= WORKER_CLIENT_ID %>",
+          client_secret: "<%= WORKER_CLIENT_SECRET %>",
+          grant_type: "client_credentials",
+        };
+
+        const tokenResponseClientCredentials = await fetch(`https://auth.pingone.${pingOneDomain}/${pingOneEnvId}/as/token`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: new URLSearchParams(clientCredentialsOptions).toString(),
+        });
+
+        const tokenData = await tokenResponseClientCredentials.json();
+        const clientCredentialsAccessToken = tokenData.access_token;
+
+        // Call the PingOne Authorize PDP API to check permissions
+        const authResponse = await fetch(authorizeEndpoint, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${clientCredentialsAccessToken}`,  
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            parameters: { "Country": "DE","City": "Hamburg"},
+            userContext: { user: { id: userInfo.sub } },
+          }),
+        });
+
+        const authDecision = await authResponse.json();
+        console.log("Authorization Decision:", authDecision);
+
+        if (authDecision.decision === "PERMIT") {
+          document.getElementById("main-data").style.display = "block";
+          document.getElementById("user-stats").style.display = "block";
+        } else {
+          console.log("Access denied to the main section");
+        }
+
+        // Logout functionality using the endSession method
+        document.getElementById("bxi-log-out").addEventListener("click", async () => {
+          await client.endSession(clientOptions.logout_uri);
+        });
+
+      } catch (error) {
+        console.error("Failed to exchange code or fetch user info", error);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+# OIDC for Authorization Code Grant (PKCE)
+CLIENT_ID=XXXXX
+REDIRECT_URI=http://localhost:3000/dashboard
+
+# OIDC for Client Credentials Grant (PingOne Authorize)
+WORKER_CLIENT_ID=XXXXX
+WORKER_CLIENT_SECRET=XXXXX
+LOGOUT_URL=http://localhost:3000
+
+# Authorization endpoint for PingOne
+AUTHORIZE_ENDPOINT=XXXXX
+
+# Other Settings
+PING_ONE_ENV_ID=XXXXX
+PING_ONE_DOMAIN=XX //eg. 'eu','us'
+PORT=3000

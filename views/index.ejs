@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to the Guitar Reseller Partner Portal</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <!-- Background image is handled by CSS -->
+  <div class="background-image"></div>
+
+  <!-- Main wrapper for flexbox layout -->
+  <div class="content-wrapper">
+    <header>
+      <div class="header-container">
+        <!-- //<img class="logo" src="/images/logo.svg" alt="Logo"> -->
+        <h1>Welcome to the Guitar Reseller Partner Portal</h1>
+        <nav class="top-nav">
+          <ul>
+            <button id="log-in-btn" class="login-btn">Log In</button>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="offers">
+        <h2>Special Offers on Guitars</h2>
+        <div class="guitar-cards">
+          <div class="guitar-card">
+            <img src="/images/guitar1.png" alt="Guitar 1">
+            <h3>Custom Les Paul</h3>
+            <p class="price">$2,200</p>
+            <p>Rich, warm tones with a timeless design.</p>
+            <button class="buy-now">Buy Now</button>
+          </div>
+
+          <div class="guitar-card">
+            <img src="/images/guitar2.png" alt="Guitar 2">
+            <h3>Gretsch Electromatic</h3>
+            <p class="price">$800</p>
+            <p>Unique Filtertron tone and stunning design.</p>
+            <button class="buy-now">Buy Now</button>
+          </div>
+
+          <div class="guitar-card">
+            <img src="/images/guitar3.png" alt="Guitar 3">
+            <h3>Fender Stratocaster</h3>
+            <p class="price">$1100</p>
+            <p>Classic Fender tone and feel, perfect for all skill levels.</p>
+            <button class="buy-now">Buy Now</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- <footer>
+      <nav class="footer-nav">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Contact Us</a>
+      </nav>
+      <p>&copy; 2024 Guitar Shop | All Rights Reserved</p>
+    </footer>
+  </div> -->
+
+  <!-- PingOne OIDC SDK -->
+  <script type="module" src="https://unpkg.com/@pingidentity-developers-experience/ping-oidc-client-sdk@^2/lib/ping-oidc.js"></script>
+
+  <script type="module">
+    document.addEventListener("DOMContentLoaded", async () => {
+      const redirectUri = "<%= REDIRECT_URI %>";
+      const pingOneEnvId = "<%= PING_ONE_ENV_ID %>";
+      const clientId = "<%= CLIENT_ID %>";
+      const pingOneDomain = "<%= PING_ONE_DOMAIN %>";
+
+      const clientOptions = {
+        client_id: clientId,
+        redirect_uri: redirectUri,
+        scope: "openid profile email",
+      };
+
+      try {
+        // Initialize OIDC client
+        const client = await pingOidc.OidcClient.initializeFromOpenIdConfig(
+          `https://auth.pingone.${pingOneDomain}/${pingOneEnvId}/as`,
+          clientOptions
+        );
+
+        // Attach event listener to log-in button
+        document.getElementById("log-in-btn").addEventListener("click", async () => {
+          await client.authorize();
+        });
+
+      } catch (error) {
+        console.error("OIDC initialization failed", error);
+      }
+    });
+  </script>
+</body>
+</html>

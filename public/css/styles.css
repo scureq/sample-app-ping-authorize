@@ -1,0 +1,240 @@
+/* General styling */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box; /* Ensure padding doesn't break layout */
+}
+
+/* Background image */
+.background-image {
+  background-image: url('/images/soft-background.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+/* Header styling */
+header {
+  text-align: center;
+  padding: 20px;
+  font-size: large;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f4f4;
+  position: relative;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  width: 150px;
+}
+
+.top-nav {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.login-btn {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-decoration: none;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.login-btn:hover {
+  background-color: #45a049;
+}
+
+/* Flexbox layout for main-data and user-stats */
+.data-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 20px auto;
+  box-sizing: border-box;
+}
+
+#user-info {
+  background-color: rgba(255, 255, 255, 0.8);
+  color: #333;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+  max-width: 900px;
+  margin: 0 auto; /* Center the user info box */
+  margin-top: 20px;
+}
+
+/* Styling for main-data and user-stats */
+#main-data, #user-stats {
+  background-color: rgba(255, 255, 255, 0.8);
+  color: #333;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+  width: 45%;
+}
+
+/* Table styling in user-info */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead th {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px;
+}
+
+tbody td {
+  padding: 10px;
+  text-align: left;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: rgba(0, 0, 0, 0.05); /* Slight transparency */
+}
+
+tbody tr:nth-child(even) {
+  background-color: rgba(0, 0, 0, 0.1); /* Slight transparency */
+}
+
+tbody td {
+  color: #666;
+}
+
+/* Footer styling */
+footer {
+  background-color: rgba(0, 0, 0, 0.8); /* Slight transparency */
+  color: white;
+  text-align: center;
+  padding: 20px 0;
+  width: 100%; /* Make footer full width */
+  margin-top: auto; /* Push footer to the bottom */
+  box-sizing: border-box;
+}
+
+footer a {
+  color: #fff;
+  margin: 0 15px;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+footer a:hover {
+  color: #4CAF50;
+}
+
+footer p {
+  margin: 0;
+}
+
+/* Responsive layout */
+@media (max-width: 768px) {
+  .data-container {
+    flex-direction: column;
+    align-items: center; /* Center the sections when stacked vertically */
+  }
+
+  #user-info, #main-data, #user-stats {
+    width: 100%; /* Make sections full-width on small screens */
+  }
+}
+
+/* Offers Section (for index.ejs) */
+.offers {
+  text-align: center;
+  padding: 40px 20px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 15px;
+  margin: 20px auto;
+  max-width: 1200px;
+}
+
+.offers h2 {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.guitar-cards {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.guitar-card {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: center;
+  max-width: 300px;
+  flex: 1;
+}
+
+.guitar-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.guitar-card h3 {
+  font-size: 1.5rem;
+  color: #333;
+  margin: 15px 0;
+}
+
+.guitar-card .price {
+  font-size: 1.25rem;
+  color: #4CAF50;
+  margin: 10px 0;
+  font-weight: bold;
+}
+
+.guitar-card p {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.buy-now {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.buy-now:hover {
+  background-color: #45a049;
+}
